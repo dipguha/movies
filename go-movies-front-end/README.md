@@ -40,4 +40,9 @@ Movies website using React and Go
     3. index.html
 9. Install React router
     1. npm i react-router-dom (go-movies-front-end)
-
+10. React knowledge
+    1. useState- hook to manage state in functional components
+    2. useEffect - hook to manage side effect like fetching data
+    3. Functinal component vs Class components 
+    4. JSX - 
+    5. Javascript expression and template
