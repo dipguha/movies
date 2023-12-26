@@ -16,7 +16,8 @@ const Movies = () => {
         setMovies(movieList)
     }, [] )
     
-    
+    console.log("***** Movies.js *****")
+
     return (
         <div>
             <h2>Movies</h2>

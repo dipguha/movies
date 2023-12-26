@@ -1,13 +1,35 @@
 import { useState } from "react";
 import Input from "./form/input";
+import { Navigate, useNavigate, useOutletContext } from "react-router-dom";
 
 const Login = () => {
 
+    //useState returns an array and [] square brackets are used for destructure to get the state variable and the corresponding updatefunction
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    //Custom hook returns objects and curly braces are used to extract specific values or functions
+    const {setJwtToken} = useOutletContext();
+    const {setAlertMessage} = useOutletContext();
+    const {setAlertClassName} = useOutletContext();
+
+    const navigate = useNavigate();
+    
+    console.log("***** Login.js *****")
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        
+        console.log("***** Login.js, email/password *****", email, password)
+
+        if (email === "a@a.com") {
+            setJwtToken("abc")
+            setAlertClassName("d-non")
+            setAlertMessage("")
+            navigate("/")
+        } else {
+            setAlertClassName("alert-danger")
+            setAlertMessage("Wrong Credentials, Please try again")
+        }
     }
 
     return (
