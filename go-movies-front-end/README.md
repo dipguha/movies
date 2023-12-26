@@ -46,3 +46,6 @@ Movies website using React and Go
     3. Functinal component vs Class components 
     4. JSX - 
     5. Javascript expression and template
+11. Go 
+    1. Create new folder
+    2. go mod init backend
