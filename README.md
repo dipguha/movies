@@ -52,3 +52,6 @@ Movies website using React and Go
 12. Run go 
     1. go run ./cmd/api
     2. http://localhost:8080/
+13. Install router
+    1. chi router
+    2. go get -u github.com/go-chi/chi/v5
