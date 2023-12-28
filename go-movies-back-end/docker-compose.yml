@@ -11,7 +11,7 @@ services:
       POSTGRES_DB: movies
     logging:
       options:
-        max-size: 10m
+        max-size: 20m
         max-file: "3"
     ports:
       - '5432:5432'

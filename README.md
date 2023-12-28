@@ -64,3 +64,8 @@ Movies website using React and Go
 15. Git commands
     1. git rm -r --cached go-movies-back-end/postgres-data
     2. git commit -m "Removed folder_name"    
+16. Database driver, connecting to Postgres
+    1. lib/pq
+    2. pgx - used, 
+    3. go get github.com/jackc/pgx/v4
+    4. go get github.com/jackc/pgconn
