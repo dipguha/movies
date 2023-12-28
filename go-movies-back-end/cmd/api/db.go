@@ -10,31 +10,31 @@ import (
 )
 
 func openDB(dsn string) (*sql.DB, error) {
-	log.Println("***** openDB dsn *****:", dsn)
+	log.Println("***** db - openDB dsn *****:", dsn)
 	db, err := sql.Open("pgx", dsn)
 	if err != nil {
 		return nil, err
 	}
-	log.Println("***** openDB after sql Open *****: ", db)
+	log.Println("***** db - openDB after sql Open *****: ", db)
 
 	err = db.Ping()
 	if err != nil {
-		log.Println("***** Ping err *****: ", err)
+		log.Println("***** db - Ping err *****: ", err)
 		return nil, err
 	}
 
-	log.Println("***** openDB after Ping *****:", db)
+	log.Println("***** db - openDB after Ping *****:", db)
 
 	return db, nil
 }
 
 func (app *application) connectToDB() (*sql.DB, error) {
-	log.Println("***** connectToDB start *****:", app)
+	log.Println("***** db - connectToDB start *****:", app)
 	connection, err := openDB(app.DSN)
 	if err != nil {
 		return nil, err
 	}
 
-	log.Println("***** Connetced to Postgres *****:")
+	log.Println("***** db - Connetced to Postgres *****:")
 	return connection, nil
 }

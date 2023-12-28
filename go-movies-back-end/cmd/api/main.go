@@ -1,7 +1,8 @@
 package main
 
 import (
-	"database/sql"
+	"backend/internal/repository"
+	"backend/internal/repository/dbrepo"
 	"flag"
 	"fmt"
 	"log"
@@ -11,10 +12,11 @@ import (
 const port = 8080
 
 // *sql.DB - pointer to a poll of DB connection
+// DB     *sql.DB change as part of 52
 type application struct {
 	DSN    string
 	Domain string
-	DB     *sql.DB
+	DB     repository.DataBaseRepo
 }
 
 func main() {
@@ -27,17 +29,19 @@ func main() {
 	flag.StringVar(&app.DSN, "dsn", "host=localhost port=5432 user=postgres password=postgres dbname=movies sslmode=disable timezone=UTC connect_timeout=5", "Postgres connection string")
 	flag.Parse()
 
-	log.Println("***** app.DSN *****:", app.DSN)
+	log.Println("***** main - app.DSN *****: ", app.DSN)
 	//connect to the db
 	conn, err := app.connectToDB()
 	if err != nil {
 		log.Fatal(err)
 	}
-	app.DB = conn
+	app.DB = &dbrepo.PostgresDBRepo{DB: conn}
+	log.Println("***** main - app.DB *****:", app.DB)
+	defer app.DB.Connection().Close()
 
 	app.Domain = "example.com"
 
-	log.Println("Starting the application on port", port)
+	log.Println("***** main - Starting the application on port: ", port)
 
 	//http.HandleFunc("/", Hello) - don't need any more
 
