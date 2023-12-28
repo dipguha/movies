@@ -61,4 +61,6 @@ Movies website using React and Go
     2. docker-compose down
     3. Beekeeper studio to connect to the Postgres DB
     4. Connect using TablePlus (Name - movies, Host - localhost, User - postgres, pwd - postgres, Database - movies, SSL mode - PREFERRED)
-    
+15. Git commands
+    1. git rm -r --cached go-movies-back-end/postgres-data
+    2. git commit -m "Removed folder_name"    
