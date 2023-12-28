@@ -56,4 +56,9 @@ Movies website using React and Go
     1. chi router
     2. go get -u github.com/go-chi/chi/v5
     3. Port - sudo lsof -i :8080
+14. Install DB using Docker
+    1. docker-compose up -d
+    2. docker-compose down
+    3. Beekeeper studio to connect to the Postgres DB
+    4. Connect using TablePlus (Name - movies, Host - localhost, User - postgres, pwd - postgres, Database - movies, SSL mode - PREFERRED)
     
