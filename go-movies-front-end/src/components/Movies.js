@@ -8,12 +8,22 @@ const Movies = () => {
 
     //useEffect is a hook in functional component to side effects (e.g. fetch data). Uses 3 lifecycle methods(DidMount, DidUpdate, WillUnmount)
     useEffect( () => {
-        let movieList = [
-            { id: 1, title: "Movie 1", release_date: "01-01-2001", runtime: 111, mpaa_rating: "R1", description: "Description 1" },
-            { id: 2, title: "Movie 2", release_date: "02-02-2002", runtime: 222, mpaa_rating: "R2", description: "Description 2" },
-            { id: 3, title: "Movie 3", release_date: "03-03-2003", runtime: 333, mpaa_rating: "R3", description: "Description 3" },
-        ];
-        setMovies(movieList)
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json")
+
+        const requestOptions = {
+            method: "GET",
+            headers: headers,
+        }
+
+        fetch(`http://localhost:8080/movies`, requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+                setMovies(data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }, [] )
     
     console.log("***** Movies.js *****")
