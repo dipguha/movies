@@ -31,3 +31,30 @@ func (app *application) AllMovies(w http.ResponseWriter, r *http.Request) {
 
 	_ = app.writeJSON(w, http.StatusOK, movies) //this is new addition
 }
+
+func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
+	// Read the json payload
+
+	// Validate user against DB
+
+	// Check password
+
+	// Create a JWT user
+	u := jwtUser{
+		ID:        1,
+		FirstName: "Admin",
+		LastName:  "User",
+	}
+
+	// Generate token
+	tokens, err := app.auth.GenerateTokenPair(&u)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	log.Println("***** handlers - authenticate tokens *****: ", tokens)
+	log.Println("***** handlers - authenticate Access token *****: ", tokens.Token)
+	log.Println("***** handlers - authenticate Refresh token *****: ", tokens.RefreshToken)
+
+	w.Write([]byte(tokens.Token))
+}

@@ -34,7 +34,7 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-func (j *Auth) Auth(user *jwtUser) (TokenPairs, error) {
+func (j *Auth) GenerateTokenPair(user *jwtUser) (TokenPairs, error) {
 	// Create an JWT access token
 	token := jwt.New(jwt.SigningMethodHS256)
 	log.Println("***** Auth - Access token: ***** ", token)

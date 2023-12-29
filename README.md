@@ -69,3 +69,10 @@ Movies website using React and Go
     2. pgx - used, 
     3. go get github.com/jackc/pgx/v4
     4. go get github.com/jackc/pgconn
+17. JWT package for User authentication
+    1. golang-jwt/jwt - https://github.com/golang-jwt/jwt
+    2. go get github.com/golang-jwt/jwt/v4 
+        1. go: downloading github.com/golang-jwt/jwt/v4 v4.5.0
+        2. go: downloading github.com/golang-jwt/jwt v3.2.2+incompatible
+        3. go: added github.com/golang-jwt/jwt/v4 v4.5.0
+18. 
