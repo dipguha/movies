@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"log"
 	"net/http"
 )
@@ -33,9 +34,26 @@ func (app *application) AllMovies(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
+
 	// Read the json payload
+	var requestPayload struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+
+	err := app.readJSON(w, r, &requestPayload)
+	if err != nil {
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
 
 	// Validate user against DB
+	user, err := app.DB.GetUserByEmail(requestPayload.Email)
+	if err != nil {
+		app.errorJSON(w, errors.New("invalid email id"), http.StatusBadRequest)
+		return
+	}
+	log.Println("***** handlers-authenticate-user: ", user)
 
 	// Check password
 
@@ -52,9 +70,13 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 		app.errorJSON(w, err)
 		return
 	}
-	log.Println("***** handlers - authenticate tokens *****: ", tokens)
-	log.Println("***** handlers - authenticate Access token *****: ", tokens.Token)
-	log.Println("***** handlers - authenticate Refresh token *****: ", tokens.RefreshToken)
+	log.Println("***** handlers-authenticate-tokens: ", tokens)
+	log.Println("***** handlers-authenticate-AccessToken: ", tokens.Token)
+	log.Println("***** handlers-authenticate-RefreshToken: ", tokens.RefreshToken)
 
+	refreshCookie := app.auth.GetRefreshCookie(tokens.RefreshToken)
+	log.Println("***** handlers-authenticate-refreshCookie: ", refreshCookie)
+
+	http.SetCookie(w, refreshCookie)
 	w.Write([]byte(tokens.Token))
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -37,7 +38,7 @@ type Claims struct {
 func (j *Auth) GenerateTokenPair(user *jwtUser) (TokenPairs, error) {
 	// Create an JWT access token
 	token := jwt.New(jwt.SigningMethodHS256)
-	log.Println("***** Auth - Access token: ***** ", token)
+	log.Println("***** Auth-GenerateTokenPair-AccessToken: ***** ", token)
 
 	// Set the claim
 	claims := token.Claims.(jwt.MapClaims)
@@ -56,12 +57,13 @@ func (j *Auth) GenerateTokenPair(user *jwtUser) (TokenPairs, error) {
 	if err != nil {
 		return TokenPairs{}, err
 	}
-	log.Println("***** Auth - signedAccessToken: ***** ", signedAccessToken)
+	log.Println("***** Auth-GenerateTokenPair-signedAccessToken: ", signedAccessToken)
 
 	// Create a refresh token and set claims
 	refreshToken := jwt.New(jwt.SigningMethodHS256)
-	log.Println("***** Auth - Refresh token: ***** ", refreshToken)
-	refreshTokenClaims := token.Claims.(jwt.MapClaims)
+	log.Println("***** Auth-GenerateTokenPair-RefreshToken: ", refreshToken)
+
+	refreshTokenClaims := refreshToken.Claims.(jwt.MapClaims)
 	refreshTokenClaims["sub"] = fmt.Sprint(user.ID)
 	refreshTokenClaims["iat"] = time.Now().UTC().Unix()
 
@@ -73,7 +75,7 @@ func (j *Auth) GenerateTokenPair(user *jwtUser) (TokenPairs, error) {
 	if err != nil {
 		return TokenPairs{}, err
 	}
-	log.Println("***** Auth - signedRefreshToken: ***** ", signedRefreshToken)
+	log.Println("***** Auth-GenerateTokenPair-signedRefreshToken: ", signedRefreshToken)
 
 	// Create TokenPairs and populate with signed tokens
 	var tPairs = TokenPairs{
@@ -83,4 +85,47 @@ func (j *Auth) GenerateTokenPair(user *jwtUser) (TokenPairs, error) {
 
 	// Return TokenPairs
 	return tPairs, nil
+}
+
+func (j *Auth) GetRefreshCookie(refreshToken string) *http.Cookie {
+	/* 	refreshCookie := &http.Cookie{
+	   		Name:     j.CookieName,
+	   		Path:     j.CookiePath,
+	   		Value:    refreshToken,
+	   		Expires:  time.Now().Add(j.RefreshExpiry),
+	   		MaxAge:   int(j.RefreshExpiry.Seconds()),
+	   		SameSite: http.SameSiteStrictMode,
+	   		Domain:   j.CookieDomain,
+	   		HttpOnly: true,
+	   		Secure:   true,
+	   	}
+	   	log.Println("***** Auth-GetRefreshCookie-refreshCookie: ", refreshCookie)
+	   	return refreshCookie */
+
+	return &http.Cookie{
+		Name:     j.CookieName,
+		Path:     j.CookiePath,
+		Value:    refreshToken,
+		Expires:  time.Now().Add(j.RefreshExpiry),
+		MaxAge:   int(j.RefreshExpiry.Seconds()),
+		SameSite: http.SameSiteStrictMode,
+		Domain:   j.CookieDomain,
+		HttpOnly: true,
+		Secure:   true,
+	}
+}
+
+func (j *Auth) GetExpiredRefreshCookie(refreshToken string) *http.Cookie {
+	return &http.Cookie{
+		Name:     j.CookieName,
+		Path:     j.CookiePath,
+		Value:    "",
+		Expires:  time.Unix(0, 0),
+		MaxAge:   -1,
+		SameSite: http.SameSiteStrictMode,
+		Domain:   j.CookieDomain,
+		HttpOnly: true,
+		Secure:   true,
+	}
+	//log.Println("***** Auth-GetRefreshCookie-refreshCookie: ", refreshCookie)
 }
