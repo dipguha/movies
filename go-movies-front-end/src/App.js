@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import Alert from "./components/Alert";
 
@@ -12,9 +12,51 @@ function App() {
   const navigate = useNavigate();
 
   const logout = () => {
-    setJwtToken("")
+    console.log("****** App.js-logout-jwtToken: ",jwtToken)
+
+    const requestOptions = {
+      method: "GET",
+      credentials: "include"
+    }
+
+    //console.log("****** App.js-logout-calling logout: ",jwtToken)
+    fetch("/logout", requestOptions)
+      .catch( error => {
+        console.log("error logout: ", error)
+      })
+      .finally(() => {
+        setJwtToken("")
+      })
+    
     navigate("/login")
   }
+
+  /* perform side effects (e.g. data fetrching, DOM changes) in functional components, replicate lifecycle methods of class based components like 
+  componentDidMount, componentDidUpdate, and componentWillUnmount.
+  The effect runs after the initial render and whenever one of the dependencies changes.
+  */
+  useEffect( () => {
+    console.log("****** App.js-useEffect-jwtToken: ", jwtToken)
+    if (jwtToken === "") {
+
+      const requestOptions = {
+        method: "GET",
+        credentials: "include",
+      }
+
+      console.log("****** App.js-useEffect-calling /refresh-requestOptions: ", requestOptions)
+      fetch(`/refresh`, requestOptions)
+        .then( (response) => response.json())
+        .then( (data) => {
+          if (data.access_token) {
+            setJwtToken(data.access_token);
+          }
+        })
+        .catch(error => {
+          console.log("user is not logged in: ", error);
+        })
+    }
+  }, [jwtToken])
 
   return (
     <div className="container">
@@ -51,7 +93,6 @@ function App() {
         </div>
         
         <div className="col-md-10">
-          {/* */}
           <Alert message={alertMessage} className={alertClassName}/>
           <Outlet context={ {jwtToken, setJwtToken, setAlertMessage, setAlertClassName} }/>
         </div>

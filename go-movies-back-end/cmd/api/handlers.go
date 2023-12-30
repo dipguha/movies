@@ -33,7 +33,10 @@ func (app *application) AllMovies(w http.ResponseWriter, r *http.Request) {
 	_ = app.writeJSON(w, http.StatusOK, movies) //this is new addition
 }
 
+// ------------------------------------------------------------------------------------
 func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
+
+	log.Println("***** handlers-authenticate-r: ", r)
 
 	// Read the json payload
 	var requestPayload struct {
@@ -46,6 +49,8 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 		app.errorJSON(w, err, http.StatusBadRequest)
 		return
 	}
+
+	log.Println("***** handlers-authenticate-requestPayload: ", requestPayload)
 
 	// Validate user against DB
 	user, err := app.DB.GetUserByEmail(requestPayload.Email)
@@ -85,4 +90,25 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 
 	http.SetCookie(w, refreshCookie)
 	app.writeJSON(w, http.StatusAccepted, tokens)
+}
+
+// ------------------------------------------------------------------------------------
+func (app *application) refreshToken(w http.ResponseWriter, r *http.Request) {
+
+	log.Println("***** handlers-refreshToken-start r.cookies: ", r.Cookies())
+
+	// Loop through all cookies
+	for _, cookie := range r.Cookies() {
+		log.Println("***** handlers-refreshToken-cookie: ", cookie)
+		log.Println("***** handlers-refreshToken-cookie name: ", cookie.Name)
+	}
+
+}
+
+// ------------------------------------------------------------------------------------
+func (app *application) logout(w http.ResponseWriter, r *http.Request) {
+	log.Println("***** handlers-logout-r.Cookies(): ", r.Cookies())
+	http.SetCookie(w, app.auth.GetExpiredRefreshCookie())
+	w.WriteHeader(http.StatusAccepted)
+
 }

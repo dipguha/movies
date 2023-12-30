@@ -40,14 +40,14 @@ func main() {
 	flag.StringVar(&app.Domain, "domain", "example.com", "domain")
 	flag.Parse()
 
-	log.Println("***** main - app.DSN *****: ", app.DSN)
+	log.Println("***** main-app.DSN: ", app.DSN)
 	// connect to the db
 	conn, err := app.connectToDB()
 	if err != nil {
 		log.Fatal(err)
 	}
 	app.DB = &dbrepo.PostgresDBRepo{DB: conn}
-	log.Println("***** main - app.DB *****:", app.DB)
+	log.Println("***** main-app.DB :", app.DB)
 	defer app.DB.Connection().Close()
 
 	// Populate the Auth struct
@@ -62,9 +62,7 @@ func main() {
 		CookieDomain:  app.CookieDomain,
 	}
 
-	log.Println("***** main - Starting the application on port: ", port)
-
-	//http.HandleFunc("/", Hello) - don't need any more
+	log.Println("***** main-Starting the application on port: ", port)
 
 	//start a web server
 	err = http.ListenAndServe(fmt.Sprintf(":%d", port), app.routes())

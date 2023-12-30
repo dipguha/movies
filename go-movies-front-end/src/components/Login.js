@@ -20,17 +20,43 @@ const Login = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         
-        console.log("***** Login.js, email/password: ", email, password)
+        console.log("***** Login.js-handlesubmit-email/password: ", email, password)
 
-        if (email === "a@a.com") {
-            setJwtToken("abc")
-            setAlertClassName("d-non")
-            setAlertMessage("")
-            navigate("/")
-        } else {
-            setAlertClassName("alert-danger")
-            setAlertMessage("Wrong Credentials, Please try again")
+        // Build the request payload
+        let payload = {
+            email: email,
+            password: password
+        }    
+
+        // include tells browser to send any relevant cookies and HTTP auth headers
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(payload),
         }
+
+        console.log("***** Login.js-call authenticate-requestOptions: ", requestOptions)
+        fetch(`/authenticate`, requestOptions)
+            .then((response) => response.json())
+            .then( (data) => {
+                if (data.error) {
+                    setAlertClassName("alert-danger")
+                    setAlertMessage(data.message)
+                } else {
+                    setJwtToken(data.access_token)
+                    setAlertClassName("d-none")
+                    setAlertMessage("")
+                    navigate("/")
+                }
+            })
+            .catch (error => {
+                setAlertClassName("alert-danger")
+                setAlertMessage(error)
+            })
+
     }
 
     return (
