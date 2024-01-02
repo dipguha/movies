@@ -11,7 +11,7 @@ function App() {
   
   const navigate = useNavigate();
 
-  console.log("***** App.js jwtToken: ", jwtToken)
+  //console.log("***** App.js jwtToken: ", jwtToken)
 
   //====================================================================
   const logout = () => {
