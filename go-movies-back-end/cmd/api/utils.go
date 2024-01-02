@@ -44,7 +44,7 @@ func (app *application) readJSON(w http.ResponseWriter, r *http.Request, data in
 	log.Println("***** utils-readJSON-r.Body: ", r.Body)
 
 	dec := json.NewDecoder(r.Body)
-	log.Println("***** utils-readJSON-dec: ", dec)
+	//log.Println("***** utils-readJSON-dec: ", dec)
 
 	dec.DisallowUnknownFields()
 

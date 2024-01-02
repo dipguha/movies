@@ -13,7 +13,7 @@ import ManageCatalogue from './components/ManageCatalogue';
 import GraphQL from './components/GraphQL';
 import Login from './components/Login';
 
-
+console.log("***** index.js")
 const router = createBrowserRouter([
   {
     path: "/",

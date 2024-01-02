@@ -35,6 +35,7 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
+// ============================================================================================
 func (j *Auth) GenerateTokenPair(user *jwtUser) (TokenPairs, error) {
 	// Create an JWT access token
 	token := jwt.New(jwt.SigningMethodHS256)
@@ -83,24 +84,11 @@ func (j *Auth) GenerateTokenPair(user *jwtUser) (TokenPairs, error) {
 		RefreshToken: signedRefreshToken,
 	}
 
-	// Return TokenPairs
 	return tPairs, nil
 }
 
+// ============================================================================================
 func (j *Auth) GetRefreshCookie(refreshToken string) *http.Cookie {
-	/* 	refreshCookie := &http.Cookie{
-	   		Name:     j.CookieName,
-	   		Path:     j.CookiePath,
-	   		Value:    refreshToken,
-	   		Expires:  time.Now().Add(j.RefreshExpiry),
-	   		MaxAge:   int(j.RefreshExpiry.Seconds()),
-	   		SameSite: http.SameSiteStrictMode,
-	   		Domain:   j.CookieDomain,
-	   		HttpOnly: true,
-	   		Secure:   true,
-	   	}
-	   	log.Println("***** Auth-GetRefreshCookie-refreshCookie: ", refreshCookie)
-	   	return refreshCookie */
 
 	return &http.Cookie{
 		Name:     j.CookieName,
@@ -115,6 +103,7 @@ func (j *Auth) GetRefreshCookie(refreshToken string) *http.Cookie {
 	}
 }
 
+// ============================================================================================
 func (j *Auth) GetExpiredRefreshCookie() *http.Cookie {
 	return &http.Cookie{
 		Name:     j.CookieName,
@@ -127,5 +116,4 @@ func (j *Auth) GetExpiredRefreshCookie() *http.Cookie {
 		HttpOnly: true,
 		Secure:   true,
 	}
-	//log.Println("***** Auth-GetRefreshCookie-refreshCookie: ", refreshCookie)
 }

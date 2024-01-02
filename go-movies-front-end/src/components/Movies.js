@@ -10,13 +10,17 @@ const Movies = () => {
     useEffect( () => {
         const headers = new Headers();
         headers.append("Content-Type", "application/json")
+        
+        //headers.append("Cookie", "testCookieName=testCookieValue")
+        //document.cookie = "testCookieName=testCookieValue";
 
         const requestOptions = {
             method: "GET",
             headers: headers,
+            credentials: "include"
         }
 
-        fetch(`http://localhost:8080/movies`, requestOptions)
+        fetch(`/movies`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 setMovies(data)
