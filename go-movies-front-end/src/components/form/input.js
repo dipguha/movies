@@ -2,7 +2,8 @@ import { forwardRef } from "react";
 
 //forwardRef is a function from React library. Allows to forward ref to a child component or DOM element created inside a functional component
 const Input = forwardRef( (props, ref) => {
-    console.log("***** Input.js *****")
+    //console.log("***** Input.js-props: ", props)
+    //console.log("***** Input.js-ref: ", ref)
     return (
         <div className="mb-3">
             {/* htmlFor is used to connect the label with the input field */}
@@ -13,7 +14,7 @@ const Input = forwardRef( (props, ref) => {
             <input
                 type={props.type}
                 className={props.className}
-                id={props.id}
+                id={props.name}
                 ref={ref}
                 name={props.name}
                 placeholder={props.placeholder}
@@ -22,7 +23,7 @@ const Input = forwardRef( (props, ref) => {
                 value={props.value}
             />
 
-            <div className="">{props.errorMsg}</div>
+            <div className={props.errorDiv}>{props.errorMsg}</div>
         </div>
     )
 })

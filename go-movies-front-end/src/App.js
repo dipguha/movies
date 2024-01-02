@@ -11,7 +11,7 @@ function App() {
   
   const navigate = useNavigate();
 
-  //console.log("***** App.js jwtToken: ", jwtToken)
+  console.log("***** App.js jwtToken: ", jwtToken)
 
   //====================================================================
   const logout = () => {
@@ -35,41 +35,38 @@ function App() {
   }
 
 //====================================================================
-const toggleRefresh = useCallback((status) => {
-  console.log("***** toggleRefresh clicked: ");
-  //600000
-  if (status) {
-    console.log("***** toggleRefresh turning on ticking status: ", status);
-    let i  = setInterval(() => {
+  const toggleRefresh = useCallback((status) => {
+    console.log("***** toggleRefresh clicked: ");
+    //600000
+    if (status) {
+      console.log("***** toggleRefresh turning on ticking status: ", status);
+      let i  = setInterval(() => {
 
-      const requestOptions = {
-        method: "GET",
-        credentials: "include",
-      }
-
-      fetch(`/refresh`, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.access_token) {
-          setJwtToken(data.access_token);
+        const requestOptions = {
+          method: "GET",
+          credentials: "include",
         }
-      })
-      .catch(error => {
-        console.log("***** toggleRefresh-user is not logged in");
-      })
-    }, 600000);
-    setTickInterval(i);
-    console.log("setting tick interval to", i);
-  } else {
-    console.log("turning off ticking");
-    console.log("turning off tickInterval", tickInterval);
-    setTickInterval(null);
-    clearInterval(tickInterval);
-  }
-}, [tickInterval])
 
-
-
+        fetch(`/refresh`, requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.access_token) {
+            setJwtToken(data.access_token);
+          }
+        })
+        .catch(error => {
+          console.log("***** toggleRefresh-user is not logged in");
+        })
+      }, 600000);
+      setTickInterval(i);
+      console.log("setting tick interval to", i);
+    } else {
+      console.log("turning off ticking");
+      console.log("turning off tickInterval", tickInterval);
+      setTickInterval(null);
+      clearInterval(tickInterval);
+    }
+  }, [tickInterval])
 
   /* perform side effects (e.g. data fetrching, DOM changes) in functional components, replicate lifecycle methods of class based components like 
   componentDidMount, componentDidUpdate, and componentWillUnmount.
