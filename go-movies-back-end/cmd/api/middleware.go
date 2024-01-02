@@ -28,7 +28,3 @@ func (app *application) authRequired(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
-
-func (app *application) MovieCatalog(w http.ResponseWriter, r *http.Request) {
-
-}
